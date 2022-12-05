@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="background">
+        <form class="login__card" method="POST" action="">
+            {% csrf_token %}
+            <p class="login__title">Login</p>
+            <div class="form__controls">
+                <input type="text" class="login__input" name="username" placeholder="Enter your username">
+                <input type="password" class="login__input" name="password" placeholder="Confirm a password">
+            </div>
+            <button type="submit" class="btn">Login Now</button>
+            <p class="login__new-account">Don't have an account? <a href="#">Signup now</a></p>
+        </form>
+    </div>
+{% endblock %}

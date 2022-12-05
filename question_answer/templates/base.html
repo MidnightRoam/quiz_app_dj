@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="container">
+    <navbar class="navbar">
+        {% if user.is_authenticated %}
+            <li class="nav__li"><a href="{% url 'index' %}" class="link">Home</a></li>
+            <li class="nav__li"><a href="{% url 'logout' %}" class="link">{{ user }} | Logout</a></li>
+        {% else %}
+            <li class="nav__li"><a href="{% url 'login' %}" class="link">Sign In</a></li>
+            <li class="nav__li"><a href="#" class="link">Sign Up</a></li>
+        {% endif %}
+    </navbar>
+
+    {% block content %} {% endblock %}
+
+</body>
+</html>

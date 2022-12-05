@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="question__list">
+        {% for question in questions %}
+        <div class="question">
+            <div class="question__title">{{ question }}</div>
+            <div class="question__options">
+                <p class="question__option">
+                    {{ question.option1 }}
+                </p>
+                <p class="question__option">
+                    {{ question.option2 }}
+                </p>
+                <p class="question__option">
+                    {{ question.option3 }}
+                </p>
+                <p class="question__option">
+                    {{ question.option4 }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

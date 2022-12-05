@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic import DetailView, ListView
+from django.contrib.auth.models import User
 
 from .models import Question, GroupQuestion
 from .forms import AddQuestionForm
@@ -97,6 +98,23 @@ class LoginView(View):
             login(request, user)
             return redirect('/')
         return render(request, 'login.html')
+
+
+class SignupView(View):
+
+    def get(self, request):
+        return render(request, 'registration.html')
+
+    def post(self, request):
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if password1 == password2 and username is not None:
+            user = User.objects.create_user(username=username, password=password1)
+            login(request, user)
+            return redirect('/')
+
 
 
 class LogoutView(View):

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="background">
+        <form class="signup__card" method="POST" action="">
+            {% csrf_token %}
+            <p class="login__title">Signup</p>
+            <div class="form__controls">
+                <input type="text" class="login__input" name="username" placeholder="Enter your username">
+                <input type="password" class="login__input" name="password1" placeholder="Enter a password">
+                <input type="password" class="login__input" name="password2" placeholder="Repeat a password">
+            </div>
+            <button type="submit" class="btn">Signup Now</button>
+            <p class="login__new-account">Already have an account? <a href="#">Sign in now</a></p>
+        </form>
+    </div>
+{% endblock %}

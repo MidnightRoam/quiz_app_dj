@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Question, GroupQuestion
 from .forms import AddQuestionForm
@@ -44,17 +45,16 @@ class HomePage(View):
         return render(request, 'index.html', context)
 
 
-class QuestionsView(ListView):
+class QuestionsView(LoginRequiredMixin, ListView):
     model = GroupQuestion
     template_name = 'question_page.html'
-    # slug_url_kwarg = 'slug'
     context_object_name = 'questions'
+    login_url = '/signin/'
+    paginate_by = 1
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_queryset(self):
         slug = self.kwargs['slug']
-        context['questions'] = Question.objects.filter(group__slug=slug)
-        return context
+        return Question.objects.filter(group__slug=slug)
 
 
 # class QuestionsList(ListView):
@@ -94,7 +94,7 @@ class LoginView(View):
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and user.is_active:
             login(request, user)
             return redirect('/')
         return render(request, 'login.html')
@@ -110,11 +110,10 @@ class SignupView(View):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        if password1 == password2 and username is not None:
-            user = User.objects.create_user(username=username, password=password1)
-            login(request, user)
-            return redirect('/')
-
+        if password1 == password2 and username:
+                user = User.objects.create_user(username=username, password=password1)
+                login(request, user)
+                return redirect('/')
 
 
 class LogoutView(View):

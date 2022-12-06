@@ -50,10 +50,14 @@
 .total__groups {
     font-size: 2em;
     color: #fff;
-    -webkit-text-stroke: 1px #252525;
     position: absolute;
+    font-weight: 300;
     left: 10%;
     top: 1%;
+    background-color: #8D9EFF;
+    height: 1.6em;
+    width: 7em;
+    text-align: center;
 }
 
 .group {
@@ -82,10 +86,11 @@
 }
 /* Styles of personal group of test page */
 .question__list {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
+    width: 100%;
     margin: 0 auto;
     height: auto;
 }
@@ -100,13 +105,15 @@
 .question__title {
     font-size: 1.5em;
     padding: 15px;
-    border-bottom: 2px solid #497174;
+    border-bottom: 2px solid #8D72E1;
 }
 
 .question__options {
     padding: 10px;
     display: flex;
     flex-direction: column;
+    text-align: left;
+    text-justify: justify;
 }
 
 .question__option {
@@ -119,6 +126,41 @@
 .question__option:hover {
     color: #fff;
     background-color: #497174;
+}
+
+/* Question pagination styles */
+.pagination-section {
+    position: absolute;
+    margin: 10px;
+    right: 80%;
+}
+
+.pagination__title {
+    font-size: 2em;
+    font-weight: 300;
+    margin: 10px 0px;
+}
+
+.pagination-link {
+    background-color: #7879F1;
+    color: #fff;
+    padding: 3px 11px 4px 11px;
+    border-radius: 50%;
+    text-decoration: none;
+}
+
+.page-num-selected {
+    background-color: #44f5b1;
+    color: #5D5FEF;
+}
+
+.disabled {
+    background-color: #dddddd;
+    color: linen;
+    opacity: 1;
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #909090;
 }
 
 .background {
@@ -172,6 +214,13 @@
 .login__new-account a {
     text-decoration: none;
     color: #8D72E1;
+    transition: 0.2s;
+}
+
+.login__new-account a:hover {
+    color: #8D72E1;
+    border-bottom: 2px solid #44f5b1;
+
 }
 
 .signup__card {
@@ -185,6 +234,21 @@
     border-radius: 0.2em;
 }
 
+.form__label {
+    font-size: 1.3em;
+    font-weight: 300;
+}
+
+input[type="radio"] {
+
+}
+
+.question__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .btn {
     border: none;
     border-radius: 0.2em;
@@ -194,8 +258,11 @@
     text-align: center;
     width: 300px;
     font-size: 1.3em;
+    transition: 0.5s;
 }
 
 .btn:hover {
     cursor: pointer;
+    background-color: #44f5b1;
+    color: #8D72E1;
 }

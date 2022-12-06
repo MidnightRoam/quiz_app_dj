@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block header %} {% endblock %}
+
 {% block content %}
     <div class="background">
         <form class="login__card" method="POST" action="">
@@ -10,7 +12,7 @@
                 <input type="password" class="login__input" name="password" placeholder="Confirm a password">
             </div>
             <button type="submit" class="btn">Login Now</button>
-            <p class="login__new-account">Don't have an account? <a href="#">Signup now</a></p>
+            <p class="login__new-account">Don't have an account? <a href="{% url 'signup' %}">Signup now</a></p>
         </form>
     </div>
 {% endblock %}

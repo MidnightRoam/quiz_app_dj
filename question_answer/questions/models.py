@@ -3,6 +3,7 @@ from django.db import models
 
 class GroupQuestion(models.Model):
     group_name = models.CharField(max_length=250)
+    description = models.CharField(max_length=100, blank=True, default='')
     slug = models.SlugField(unique=True)
 
     def __str__(self):

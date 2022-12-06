@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -18,31 +18,31 @@ class HomePage(View):
         return render(request, 'index.html', {
             'groups': GroupQuestion.objects.all(),
             'total_groups': GroupQuestion.objects.all().count()
-                                              })
+          })
 
-    def post(self, request):
-        questions = Question.objects.all()
-        score = 0
-        wrong = 0
-        correct = 0
-        total = 0
-        for question in questions:
-            total += 1
-            if questions.answer == request.POST.get(question.question):
-                score += 10
-                correct += 1
-            else:
-                wrong += 1
-        percent = score / (total * 10) * 100
-        context = {
-            'score': score,
-            'wrong': wrong,
-            'time': request.POST.get('timer'),
-            'correct': correct,
-            'total': total,
-            'percent': percent
-        }
-        return render(request, 'index.html', context)
+    # def post(self, request):
+    #     questions = Question.objects.all()
+    #     score = 0
+    #     wrong = 0
+    #     correct = 0
+    #     total = 0
+    #     for question in questions:
+    #         total += 1
+    #         if questions.answer == request.POST.get(question.question):
+    #             score += 10
+    #             correct += 1
+    #         else:
+    #             wrong += 1
+    #     percent = score / (total * 10) * 100
+    #     context = {
+    #         'score': score,
+    #         'wrong': wrong,
+    #         'time': request.POST.get('timer'),
+    #         'correct': correct,
+    #         'total': total,
+    #         'percent': percent
+    #     }
+    #     return render(request, 'result.html', context)
 
 
 class QuestionsView(LoginRequiredMixin, ListView):
@@ -52,9 +52,10 @@ class QuestionsView(LoginRequiredMixin, ListView):
     login_url = '/signin/'
     paginate_by = 1
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         slug = self.kwargs['slug']
         return Question.objects.filter(group__slug=slug)
+
 
 
 # class QuestionsList(ListView):
@@ -121,3 +122,7 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('/')
+
+
+class ResultView(TemplateView):
+    template_name = 'result.html'

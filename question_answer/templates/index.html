@@ -6,7 +6,7 @@
         {% for group in groups %}
         <div class="group">
             <p class="group__title"><a href="questions/{{ group.slug }}" class="link">{{ group.group_name }}</a></p>
-            <p class="group__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto consequuntur corporis dolorem eligendi exercitationem ipsum nam quae quaerat suscipit voluptatem.</p>
+            <p class="group__description">{{ group.description }}</p>
         </div>
         {% endfor %}
     </div>

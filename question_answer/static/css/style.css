@@ -34,17 +34,35 @@
 }
 
 .link:hover {
-    color: #B9E0FF;
+    color: #44f5b1;
+}
+
+.auth__links {
+    display: flex;
+    flex-direction: row;
+}
+
+.auth__links .nav__li {
+    margin: 0em 0.5em;
+}
+
+.user {
+    font-size: 1.5em;
+    color: #44f5b1;
 }
 
 .group__list {
     position: relative;
-    background-color: #fff;
+    background-image: url('/static/background.svg');
+    background-repeat:no-repeat;
+    background-size: cover;
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 898px;
+    height: 899px;
     padding: 2.5em;
+    flex-wrap: wrap;
+    align-content: flex-start
 }
 
 .total__groups {
@@ -58,23 +76,43 @@
     height: 1.6em;
     width: 7em;
     text-align: center;
+    border-radius: 0.2em;
 }
 
 .group {
-    margin: 0.5em;
     padding: 0.5em;
     background-color: #8D9EFF;
     width: 280px;
-    height: 350px;
+    height: 10%;
     margin: 2em;
     border-bottom-left-radius: 3em;
     border-top-right-radius: 3em;
+    overflow: hidden;
+    transition: 0.5s;
+    border-bottom: 3px solid #44f5b1;
+}
+
+.group:hover {
+    height: 30%;
+    background-color: #44f5b1;
+    transition: 0.5s;
+}
+
+.group:hover .group__title {
+    border-bottom: 2px solid #6C4AB6;
+}
+
+.group:hover .link {
+    color: #6C4AB6;
+}
+
+.group:hover .group__description {
+    color: #6C4AB6;
 }
 
 .group__title {
-    border-bottom: 2px solid #6C4AB6;
     padding: 10px;
-    font-size: 1.3em;
+    font-size: 1.2em;
     text-align: center;
 }
 
@@ -98,12 +136,14 @@
 .question {
     margin: 2em 0em;
     padding: 0.5em;
-    width: 400px;
-    height: 300px;
+    width: 800px;
+    height: 500px;
+    background-color: #fff;
+    text-align: center;
 }
 
 .question__title {
-    font-size: 1.5em;
+    font-size: 2.5em;
     padding: 15px;
     border-bottom: 2px solid #8D72E1;
 }
@@ -119,13 +159,13 @@
 .question__option {
     margin: 5px;
     padding: 10px;
-    font-size: 1.2em;
+    font-size: 1.5em;
     background-color: #D6E4E5;
 }
 
-.question__option:hover {
-    color: #fff;
-    background-color: #497174;
+.form__check {
+    font-size: 1.3em;
+    margin: 5px 0px;
 }
 
 /* Question pagination styles */
@@ -164,8 +204,10 @@
 }
 
 .background {
-    background-color: #8D72E1;
-    height: 899px;
+    background-image: url('/static/background.svg');
+    background-repeat:no-repeat;
+    background-size: cover;
+    height: 969px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -247,6 +289,63 @@ input[type="radio"] {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* Result page styles */
+.result__page {
+    width: 100%;
+    height: 850px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 1.5s;
+    background-color: #fff;
+}
+
+.result__card {
+    background-color: #8D72E1;
+    border-radius: 0.5em;
+    width: 400px;
+    height: 500px;
+    justify-self: center;
+    border: none;
+    transition: 1s;
+}
+
+.result__card:hover {
+    width: 800px;
+    height: 600px;
+    border: 10px solid #44f5b1;
+    transition: 0.5s;
+}
+
+.result__card:hover .result__title {
+    font-size: 4em;
+    transition: 0.5s;
+    border-bottom: 10px solid #44f5b1;
+    color: #44f5b1;
+}
+
+.result__card:hover .result__elem {
+    font-size: 3em;
+    transition: 0.5s;
+    margin: 0px 20px;
+    color: #44f5b1;
+}
+
+.result__title {
+    text-align: center;
+    color: #fff;
+    font-size: 2em;
+    transition: 1s;
+    border-bottom: 3px solid #fff;
+}
+
+.result__elem {
+    font-size: 1.5em;
+    color: #fff;
+    margin: 20px;
+    transition: 1s;
 }
 
 .btn {

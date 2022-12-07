@@ -2,6 +2,9 @@
 
 {% block content %}
     <div class="group__list">
+        {% if request.user.is_staff %}
+            <a class="staff__groups" href="{% url 'add-group' %}" class="link staff__link">Add a new group</a>
+        {% endif %}
          <p class="total__groups">Available tests: {{ total_groups }}</p>
         {% for group in groups %}
         <div class="group">

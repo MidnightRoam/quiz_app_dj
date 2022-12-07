@@ -4,6 +4,9 @@
 
 {% block content %}
     <div class="question__list">
+        {% if request.user.is_staff %}
+            <a class="staff__groups" href="{% url 'add-question' %}" class="staff__link">Add a new question</a>
+        {% endif %}
          <div class="pagination-section">
              <p class="pagination__title">Questions:</p>
                 {% for page in page_obj.paginator.page_range %}

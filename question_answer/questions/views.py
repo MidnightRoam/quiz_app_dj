@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Question, GroupQuestion
-from .forms import AddQuestionForm
+from .forms import AddQuestionForm, AddQuestionGroupForm
 
 
 class HomePage(View):
@@ -57,29 +57,42 @@ class QuestionsView(LoginRequiredMixin, ListView):
         return Question.objects.filter(group__slug=slug)
 
 
+class AddQuestionView(View):
+    template_name = 'add_question.html'
 
-# class QuestionsList(ListView):
-#     model = Question
-#     template_name = 'question_page.html'
-#     context_object_name = 'question_list'
-#
-#     def get_context_data(self, *args, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['questions'] = Question.objects.all()
-#         return context
+    def get(self, request):
+        if request.user.is_staff:
+            form = AddQuestionForm()
+            return render(request, 'add_question.html')
+        else:
+            return redirect('index')
 
-# class AddQuestion(View):
-#
-#     def post(self, request):
-#         if request.user.is_staff:
-#             form = AddQuestionForm(request.POST)
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('/')
-#             context = {'form': form}
-#             return render(request, 'add_question.html', context)
-#         else:
-#             return redirect('index')
+    def post(self, request):
+        form = AddQuestionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        context = {'form': form}
+        return render(request, 'add_question.html', context)
+
+
+class AddQuestionGroupView(View):
+    template_name = 'add_question_group.html'
+
+    def get(self, request):
+        if request.user.is_staff:
+            form = AddQuestionGroupForm()
+            return render(request, 'add_question_group.html')
+        else:
+            return redirect('index')
+
+    def post(self, request):
+        form = AddQuestionGroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        context = {'form': form}
+        return render(request, 'add_question_group.html', context)
 
 
 class LoginView(View):

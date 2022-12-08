@@ -5,10 +5,16 @@ from django.contrib.auth.models import User
 from .models import Question, GroupQuestion
 
 
-class CreateUserForm(UserCreationForm):
+# class CreateUserForm(UserCreationForm):
+#     class Meta:
+#         model = User
+#         fields = ['username', 'password']
+
+
+class QuizForm(ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'password']
+        model = Question
+        fields = "__all__"
 
 
 class AddQuestionGroupForm(ModelForm):

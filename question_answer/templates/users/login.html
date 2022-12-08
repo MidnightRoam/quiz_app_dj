@@ -12,7 +12,7 @@
                 <input type="password" class="login__input" name="password" placeholder="Confirm a password">
             </div>
             <button type="submit" class="btn">Login Now</button>
-            <p class="login__new-account">Don't have an account? <a href="{% url 'signup' %}">Signup now</a></p>
+            <p class="login__new-account">Don't have an account? <a href="{% url 'users:signup' %}">Signup now</a></p>
         </form>
     </div>
 {% endblock %}

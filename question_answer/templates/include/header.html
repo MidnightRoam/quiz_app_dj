@@ -1,0 +1,12 @@
+<navbar class="navbar">
+    {% if user.is_authenticated %}
+        <li class="nav__li"><a href="{% url 'index' %}" class="link">Home</a></li>
+        <div class="auth__links">
+            <li class="nav__li user">Hello, {{ user }}</li>
+            <li class="nav__li"><a href="{% url 'users:logout' %}" class="link">Logout</a></li>
+        </div>
+    {% else %}
+        <li class="nav__li"><a href="{% url 'users:login' %}" class="link">Sign In</a></li>
+        <li class="nav__li"><a href="{% url 'users:signup' %}" class="link">Sign Up</a></li>
+    {% endif %}
+</navbar>

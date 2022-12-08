@@ -1,0 +1,12 @@
+<div class="pagination-section">
+     <p class="pagination__title">Questions:</p>
+        {% for page in page_obj.paginator.page_range %}
+
+        {% if page_obj.number == page %}
+            <a href="?page={{ page }}" class="pagination-link page-num-selected">{{ page }}</a>
+        {% else %}
+            <a href="?page={{ page }}" class="pagination-link disabled">{{ page }}</a>
+        {% endif %}
+
+        {% endfor %}
+</div>

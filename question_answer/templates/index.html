@@ -8,7 +8,7 @@
          <p class="total__groups">Available tests: {{ total_groups }}</p>
         {% for group in groups %}
         <div class="group">
-            <p class="group__title"><a href="questions/{{ group.slug }}" class="link">{{ group.group_name }}</a></p>
+            <p class="group__title"><a href="questions/{{ group.pk }}" class="link">{{ group.group_name }}</a></p>
             <p class="group__description">{{ group.description }}</p>
         </div>
         {% endfor %}

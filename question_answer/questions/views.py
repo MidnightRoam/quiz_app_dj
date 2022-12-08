@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Question, GroupQuestion
@@ -11,6 +9,7 @@ from .forms import AddQuestionForm, AddQuestionGroupForm
 
 
 class HomePage(View):
+    """Displayed groups of questions on the home page"""
     template_name = 'index.html'
     # context_object_name = 'questions'
 
@@ -46,21 +45,57 @@ class HomePage(View):
 
 
 class QuestionsView(LoginRequiredMixin, ListView):
-    model = GroupQuestion
+    """List of group questions"""
+    model = Question
     template_name = 'question_page.html'
     context_object_name = 'questions'
-    login_url = '/signin/'
+    login_url = 'users:login'
     paginate_by = 1
 
+    def post(self, request, **kwargs):
+        # pk = self.kwargs['pk']
+        questions = Question.objects.all()
+        # answers = Answer.object.filter(question__pk=pk)
+
+        score = 0
+        wrong = 0
+        correct = 0
+        total = 0
+        qnumber = 1
+        # for question in questions:
+            # total += 1
+            # if question.answer == request.POST.get(question.text):
+            #     score += 10
+            #     correct += 1
+            # else:
+            #     wrong += 1
+            # qnumber += 1
+        # percent = score / (total * 10) * 100
+        context = {
+            'score': score,
+            'wrong': wrong,
+            'time': request.POST.get('timer'),
+            'correct': correct,
+            'total': total,
+            # 'percent': percent
+        }
+        if qnumber == questions.count():
+            return render(request, 'result.html', context)
+
     def get_queryset(self, *args, **kwargs):
-        slug = self.kwargs['slug']
-        return Question.objects.filter(group__slug=slug)
+        pk = self.kwargs['pk']
+        return Question.objects.filter(group__pk=pk)
 
 
 class AddQuestionView(View):
+    """
+    Makes it possible to create questions in test rooms for the administration
+    through the site interface, not the admin panel.
+    """
+
     template_name = 'add_question.html'
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         if request.user.is_staff:
             form = AddQuestionForm()
             return render(request, 'add_question.html')
@@ -77,6 +112,12 @@ class AddQuestionView(View):
 
 
 class AddQuestionGroupView(View):
+    """
+    Makes it possible to create test rooms for the administration
+    through the site interface, not the admin panel.
+    After creating a room, it redirects to the page for creating questions.
+    """
+
     template_name = 'add_question_group.html'
 
     def get(self, request):
@@ -90,51 +131,9 @@ class AddQuestionGroupView(View):
         form = AddQuestionGroupForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('add-question')
         context = {'form': form}
         return render(request, 'add_question_group.html', context)
-
-
-class LoginView(View):
-
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('index')
-        else:
-            return render(request, 'login.html')
-
-    def post(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None and user.is_active:
-            login(request, user)
-            return redirect('/')
-        return render(request, 'login.html')
-
-
-class SignupView(View):
-
-    def get(self, request):
-        return render(request, 'registration.html')
-
-    def post(self, request):
-        username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-
-        if password1 == password2 and username:
-                user = User.objects.create_user(username=username, password=password1)
-                login(request, user)
-                return redirect('/')
-
-
-class LogoutView(View):
-
-    def get(self, request):
-        logout(request)
-        return redirect('/')
 
 
 class ResultView(TemplateView):

@@ -111,6 +111,9 @@
 }
 
 .group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 0.5em;
     background-color: #8D9EFF;
     width: 280px;
@@ -139,6 +142,32 @@
 
 .group:hover .group__description {
     color: #6C4AB6;
+}
+
+.group__btn {
+    border: none;
+    border-radius: 0.2em;
+    background-color: #8D72E1;
+    padding: 10px;
+    color: #44f5b1;
+    text-align: center;
+    width: 150px;
+    font-size: 1.3em;
+    transition: 0.5s;
+    align-self: end;
+    margin: 0 auto;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.group__btn:hover {
+    width: 100%;
+    border-radius: 0em;
+    border-bottom-left-radius: 2em;
+    border-top-right-radius: 2em;
+    transition: 0.5s;
+    background-color: orange;
+    color: #8D72E1;
 }
 
 .group__title {

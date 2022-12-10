@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="add-question__page">
+        <div class="add-question__card">
+            <h1 class="add-question__title">Add a answer</h1>
+            <div class="card__body">
+                <form action="" method="POST" class="add-question__form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn" type="submit" name="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %} {% endblock %}

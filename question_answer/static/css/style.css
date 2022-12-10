@@ -42,6 +42,23 @@
     text-align: center;
 }
 
+.new-answer__link {
+    font-size: 2em;
+    color: #fff;
+    font-weight: 300;
+    background-color: #8D9EFF;
+    border-bottom: 3px solid orange;
+    height: 1.6em;
+    width: 7em;
+    text-align: center;
+    border-radius: 0.2em;
+    position: absolute;
+    left: 80%;
+    top: 11%;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
 .staff__groups {
     font-size: 2em;
     color: #fff;
@@ -59,7 +76,7 @@
     transition: 0.5s;
 }
 
-.staff__groups:hover {
+.staff__groups:hover, .new-answer__link:hover {
     transition: 0.5s;
     background-color: orange;
     left: 78.5%;
@@ -130,6 +147,10 @@
     height: 30%;
     background-color: #44f5b1;
     transition: 0.5s;
+    border-bottom-left-radius: 0em;
+    border-top-right-radius: 0em;
+    border-bottom-right-radius: 3em;
+    border-top-left-radius: 3em;
 }
 
 .group:hover .group__title {
@@ -163,8 +184,8 @@
 .group__btn:hover {
     width: 100%;
     border-radius: 0em;
-    border-bottom-left-radius: 2em;
-    border-top-right-radius: 2em;
+    border-bottom-right-radius: 2em;
+    border-top-left-radius: 2em;
     transition: 0.5s;
     background-color: orange;
     color: #8D72E1;

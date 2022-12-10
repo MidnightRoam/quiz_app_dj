@@ -3,9 +3,10 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
-from .models import Question, GroupQuestion
-from .forms import AddQuestionForm, AddQuestionGroupForm
+from .models import Question, GroupQuestion, Answer
+from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm
 
 
 class HomePage(View):
@@ -53,8 +54,8 @@ class QuestionsView(LoginRequiredMixin, ListView):
     paginate_by = 1
 
     def post(self, request, **kwargs):
-        # pk = self.kwargs['pk']
-        questions = Question.objects.all()
+        pk = self.kwargs['pk']
+        questions = Question.objects.filter(group__pk=pk)
         # answers = Answer.object.filter(question__pk=pk)
 
         score = 0
@@ -79,12 +80,26 @@ class QuestionsView(LoginRequiredMixin, ListView):
             'total': total,
             # 'percent': percent
         }
+        qnumber += 1
         if qnumber == questions.count():
             return render(request, 'result.html', context)
+        else:
+            return redirect(f'/questions/1/?page={qnumber}')
 
-    def get_queryset(self, *args, **kwargs):
+    # def get_queryset(self, *args, **kwargs):
+    #     pk = self.kwargs['pk']
+    #     questions = Question.objects.filter(group__pk=pk)
+    #     answers = Answer.objects.filter(question__pk=pk)
+    #     return Question.objects.filter(group__pk=pk)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
         pk = self.kwargs['pk']
-        return Question.objects.filter(group__pk=pk)
+        p = Paginator(Question.objects.select_related().filter(group__pk=pk), self.paginate_by)  # pagination of question answers
+        context['questions'] = p.page(context['page_obj'].number)
+        # context['questions'] = Question.objects.filter(group__pk=pk)
+        context['answers'] = Answer.objects.filter(question__pk=pk)
+        return context
 
 
 class AddQuestionView(View):
@@ -134,6 +149,31 @@ class AddQuestionGroupView(View):
             return redirect('add-question')
         context = {'form': form}
         return render(request, 'add_question_group.html', context)
+
+
+class AddAnswerView(View):
+    """
+    Makes it possible to create a answers for the questions for the administration
+    through the site interface, not the admin panel.
+    After creating a answer, it redirects to the page of question.
+    """
+
+    template_name = 'add_answer.html'
+
+    def get(self, request):
+        if request.user.is_staff:
+            form = AddAnswerForm()
+            return render(request, 'add_answer.html')
+        else:
+            return redirect('index')
+
+    def post(self, request):
+        form = AddAnswerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        context = {'form': form}
+        return render(request, 'add_answer.html', context)
 
 
 class ResultView(TemplateView):

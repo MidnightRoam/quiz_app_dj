@@ -5,47 +5,38 @@
 {% block content %}
     <div class="question__list">
 
+<!--        staff buttons-->
         {% if request.user.is_staff %}
-            <a class="staff__groups" href="{% url 'add-question' %}" class="staff__link">Add a new question</a>
+            <a href="{% url 'add-question' %}" class="staff__groups staff__link">Add a new question</a>
+            {% if questions %}
+                <a href="{% url 'add-answer' %}" class="new-answer__link">Add a new answer</a>
+            {% endif %}
         {% endif %}
 
+<!--        Pagination-->
         {% include 'include/pagination.html' %}
 
+<!--        Send answers form-->
         <form action="" method="POST" class="question__form">
             {% csrf_token %}
             {% for question in questions %}
                 <div class="question">
-                    <div class="question__title">{{ question.question }}</div>
+                    <div class="question__title">{{ question.text }}</div>
                     <div class="question__options">
+                        {% for answer in question.answer_set.all %}
                         <div class="form__check">
-                            <input type="radio" class="question__option" value="option1" id="radio1">
-                            <label for="radio1" class="form__label">
-                                {{ question.option3 }}
+                            <input type="radio" class="question__option" value="option{{ answer.pk }}" id="radio{{ answer.pk }}">
+                            <label for="radio{{ answer.pk }}" class="form__label">
+                                {{ answer.text }}
                             </label>
                         </div>
-                        <div class="form__check">
-                            <input type="radio" class="question__option" value="option2" id="radio2">
-                            <label for="radio2" class="form__label">
-                                {{ question.option2 }}
-                            </label>
-                        </div>
-                        <div class="form__check">
-                            <input type="radio" class="question__option" value="option3" id="radio3">
-                            <label for="radio3" class="form__label">
-                                {{ question.option3 }}
-                            </label>
-                        </div>
-                        <div class="form__check">
-                            <input type="radio" class="question__option" value="option4" id="radio4">
-                            <label for="radio4" class="form__label">
-                                {{ question.option4 }}
-                            </label>
-                        </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+            {% endfor %}
             </div>
-        <input id='timer' type='hidden' name="timer" value="">
-        <button type="submit" class="btn">Submit answer</button>
+            {% if questions %}
+                <button type="submit" class="btn">Submit answer</button>
+            {% endif %}
         </form>
     </div>
 {% endblock %}

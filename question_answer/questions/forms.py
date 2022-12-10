@@ -1,14 +1,6 @@
 from django.forms import ModelForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
-from .models import Question, GroupQuestion
-
-
-# class CreateUserForm(UserCreationForm):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'password']
+from .models import Question, GroupQuestion, Answer
 
 
 class QuizForm(ModelForm):
@@ -26,4 +18,10 @@ class AddQuestionGroupForm(ModelForm):
 class AddQuestionForm(ModelForm):
     class Meta:
         model = Question
+        fields = "__all__"
+
+
+class AddAnswerForm(ModelForm):
+    class Meta:
+        model = Answer
         fields = "__all__"

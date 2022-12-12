@@ -23,17 +23,6 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
 
 
-@admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
-    """
-    Question answer section on the admin panel where you can select
-    a quiz set, select a question and create an answer to it
-    """
-
-    list_display = ('text', 'correct')
-    list_editable = ['correct']
-
-
 @admin.register(GroupQuestion)
 class GroupQuestionAdmin(admin.ModelAdmin):
     """
@@ -44,4 +33,3 @@ class GroupQuestionAdmin(admin.ModelAdmin):
     list_display = ('group_name', 'description')
     list_filter = ['group_name']
     inlines = [QuestionInline, AnswerInline]
-

@@ -25,7 +25,7 @@
                     <div class="question__options">
                         {% for answer in question.answer_set.all %}
                         <div class="form__check">
-                            <input type="radio" class="question__option" value="option{{ answer.pk }}" id="radio{{ answer.pk }}">
+                            <input type="checkbox" class="question__option checkbox" value="option{{ answer.pk }}" id="radio{{ answer.pk }}">
                             <label for="radio{{ answer.pk }}" class="form__label">
                                 {{ answer.text }}
                             </label>

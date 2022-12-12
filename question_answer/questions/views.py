@@ -4,6 +4,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.db.models import Count
 
 from .models import Question, GroupQuestion, Answer
 from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm
@@ -12,37 +13,19 @@ from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm
 class HomePage(View):
     """Displayed groups of questions on the home page"""
     template_name = 'index.html'
-    # context_object_name = 'questions'
 
     def get(self, request):
-        return render(request, 'index.html', {
-            'groups': GroupQuestion.objects.all(),
-            'total_groups': GroupQuestion.objects.all().count()
-          })
+        context = {
+            'groups': GroupQuestion.objects
+                                   .annotate(questions_count=Count('question__id'))
+                                   .filter(questions_count__gte=1),  # display group if group have 1+ question
+            'total_groups': GroupQuestion.objects
+                                         .annotate(questions_count=Count('question__id'))
+                                         .filter(questions_count__gte=1)
+                                         .count()
+        }
 
-    # def post(self, request):
-    #     questions = Question.objects.all()
-    #     score = 0
-    #     wrong = 0
-    #     correct = 0
-    #     total = 0
-    #     for question in questions:
-    #         total += 1
-    #         if questions.answer == request.POST.get(question.question):
-    #             score += 10
-    #             correct += 1
-    #         else:
-    #             wrong += 1
-    #     percent = score / (total * 10) * 100
-    #     context = {
-    #         'score': score,
-    #         'wrong': wrong,
-    #         'time': request.POST.get('timer'),
-    #         'correct': correct,
-    #         'total': total,
-    #         'percent': percent
-    #     }
-    #     return render(request, 'result.html', context)
+        return render(request, 'index.html', context)
 
 
 class QuestionsView(LoginRequiredMixin, ListView):
@@ -53,38 +36,35 @@ class QuestionsView(LoginRequiredMixin, ListView):
     login_url = 'users:login'
     paginate_by = 1
 
-    def post(self, request, **kwargs):
-        pk = self.kwargs['pk']
+    def post(self, request, pk):
         questions = Question.objects.filter(group__pk=pk)
-        # answers = Answer.object.filter(question__pk=pk)
+        answers = Answer.objects.filter(question__pk=pk)
 
         score = 0
         wrong = 0
         correct = 0
         total = 0
         qnumber = 1
-        # for question in questions:
-            # total += 1
-            # if question.answer == request.POST.get(question.text):
-            #     score += 10
-            #     correct += 1
-            # else:
-            #     wrong += 1
-            # qnumber += 1
+        for question in answers:
+            total += 1
+            if request.POST.get(question.correct) is True:
+                score += 10
+                correct += 1
+            else:
+                wrong += 1
         # percent = score / (total * 10) * 100
         context = {
             'score': score,
             'wrong': wrong,
-            'time': request.POST.get('timer'),
             'correct': correct,
             'total': total,
             # 'percent': percent
         }
-        qnumber += 1
+
         if qnumber == questions.count():
             return render(request, 'result.html', context)
         else:
-            return redirect(f'/questions/1/?page={qnumber}')
+            return redirect(f'/questions/{pk}/?page={qnumber}')
 
     # def get_queryset(self, *args, **kwargs):
     #     pk = self.kwargs['pk']

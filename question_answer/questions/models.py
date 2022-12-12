@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from django.db import models
 
 
@@ -8,6 +10,9 @@ class GroupQuestion(models.Model):
 
     def __str__(self):
         return self.group_name
+
+    def get_absolute_url(self):
+        return reverse('questions', kwargs={'pk': self.pk, })
 
 
 class Question(models.Model):
@@ -22,7 +27,7 @@ class Answer(models.Model):
     text = models.CharField(max_length=250, null=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     group = models.ForeignKey(GroupQuestion, on_delete=models.CASCADE, null=True)
-    correct = models.BooleanField(default=False)
+    correct = models.BooleanField('Correct answer', default=False)
 
     def __str__(self):
-        return f"{self.text} ({self.question})"
+        return f"{self.text} ({self.group})"

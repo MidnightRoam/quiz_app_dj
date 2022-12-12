@@ -9,10 +9,10 @@
         {% for group in groups %}
         <div class="group">
             <div>
-                <p class="group__title"><a href="questions/{{ group.pk }}" class="link">{{ group.group_name }}</a></p>
+                <p class="group__title"><a href="{{ group.get_absolute_url }}" class="link">{{ group.group_name }}</a></p>
                 <p class="group__description">{{ group.description }}</p>
             </div>
-            <a href="questions/{{ group.pk }}" class="group__btn">Attempt Quiz</a>
+            <a href="{{ group.get_absolute_url }}" class="group__btn">Attempt Quiz</a>
         </div>
         {% endfor %}
     </div>

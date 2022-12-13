@@ -141,6 +141,7 @@
     overflow: hidden;
     transition: 0.5s;
     border-bottom: 3px solid #44f5b1;
+    will-change: transition;
 }
 
 .group:hover {

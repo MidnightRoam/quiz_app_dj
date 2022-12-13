@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Count
@@ -82,31 +82,19 @@ class QuestionsView(LoginRequiredMixin, ListView):
         return context
 
 
-class AddQuestionView(View):
+class AddQuestionView(CreateView):
     """
     Makes it possible to create questions in test rooms for the administration
     through the site interface, not the admin panel.
     """
 
     template_name = 'add_question.html'
-
-    def get(self, request, **kwargs):
-        if request.user.is_staff:
-            form = AddQuestionForm()
-            return render(request, 'add_question.html')
-        else:
-            return redirect('index')
-
-    def post(self, request):
-        form = AddQuestionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-        context = {'form': form}
-        return render(request, 'add_question.html', context)
+    model = Question
+    fields = '__all__'
+    success_url = '/add_question/'
 
 
-class AddQuestionGroupView(View):
+class AddQuestionGroupView(CreateView):
     """
     Makes it possible to create test rooms for the administration
     through the site interface, not the admin panel.
@@ -114,24 +102,12 @@ class AddQuestionGroupView(View):
     """
 
     template_name = 'add_question_group.html'
-
-    def get(self, request):
-        if request.user.is_staff:
-            form = AddQuestionGroupForm()
-            return render(request, 'add_question_group.html')
-        else:
-            return redirect('index')
-
-    def post(self, request):
-        form = AddQuestionGroupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('add-question')
-        context = {'form': form}
-        return render(request, 'add_question_group.html', context)
+    model = GroupQuestion
+    fields = '__all__'
+    success_url = '/add_question/'
 
 
-class AddAnswerView(View):
+class AddAnswerView(CreateView):
     """
     Makes it possible to create a answers for the questions for the administration
     through the site interface, not the admin panel.
@@ -139,21 +115,9 @@ class AddAnswerView(View):
     """
 
     template_name = 'add_answer.html'
-
-    def get(self, request):
-        if request.user.is_staff:
-            form = AddAnswerForm()
-            return render(request, 'add_answer.html')
-        else:
-            return redirect('index')
-
-    def post(self, request):
-        form = AddAnswerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-        context = {'form': form}
-        return render(request, 'add_answer.html', context)
+    model = Answer
+    fields = '__all__'
+    success_url = '/add_answer/'
 
 
 class ResultView(TemplateView):

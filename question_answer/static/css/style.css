@@ -101,7 +101,7 @@
 
 .group__list {
     position: relative;
-    background-image: url('/static/background.svg');
+    background: #D2DAFF;
     background-repeat:no-repeat;
     background-size: cover;
     display: flex;

@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count
 
 from .models import Question, GroupQuestion, Answer
-from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm
+from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm, ResultForm
 
 
 class HomePage(View):
@@ -37,6 +37,7 @@ class QuestionsView(LoginRequiredMixin, ListView):
     paginate_by = 1
 
     def post(self, request, pk):
+        form = ResultForm
         questions = Question.objects.filter(group__pk=pk)
         answers = Answer.objects.filter(question__pk=pk)
 
@@ -58,12 +59,14 @@ class QuestionsView(LoginRequiredMixin, ListView):
             'wrong': wrong,
             'correct': correct,
             'total': total,
-            # 'percent': percent
+            # 'percent': percent,
+            'results': form,
         }
 
         if qnumber == questions.count():
             return render(request, 'result.html', context)
         else:
+            qnumber += 1
             return redirect(f'/questions/{pk}/?page={qnumber}')
 
     # def get_queryset(self, *args, **kwargs):
@@ -87,7 +90,6 @@ class AddQuestionView(CreateView):
     Makes it possible to create questions in test rooms for the administration
     through the site interface, not the admin panel.
     """
-
     template_name = 'add_question.html'
     model = Question
     fields = '__all__'
@@ -100,7 +102,6 @@ class AddQuestionGroupView(CreateView):
     through the site interface, not the admin panel.
     After creating a room, it redirects to the page for creating questions.
     """
-
     template_name = 'add_question_group.html'
     model = GroupQuestion
     fields = '__all__'
@@ -113,7 +114,6 @@ class AddAnswerView(CreateView):
     through the site interface, not the admin panel.
     After creating a answer, it redirects to the page of question.
     """
-
     template_name = 'add_answer.html'
     model = Answer
     fields = '__all__'

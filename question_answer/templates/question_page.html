@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Let's quiz it!{% endblock %}
 
 {% block content %}
@@ -34,11 +34,13 @@
                     </div>
             {% endfor %}
             </div>
-            {% if questions %}
-                <button type="submit" class="btn">Submit answer</button>
-            {% endif %}
+            <button type="submit" class="btn disabled" id="btn">Submit answer</button>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/disableButton.js' %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block footer %} {% endblock %}

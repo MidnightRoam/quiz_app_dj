@@ -1,11 +1,17 @@
 from django.forms import ModelForm
 
-from .models import Question, GroupQuestion, Answer
+from .models import Question, GroupQuestion, Answer, Result
 
 
 class QuizForm(ModelForm):
     class Meta:
         model = Question
+        fields = "__all__"
+
+
+class ResultForm(ModelForm):
+    class Meta:
+        model = Result
         fields = "__all__"
 
 

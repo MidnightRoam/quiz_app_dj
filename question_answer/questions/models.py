@@ -1,12 +1,12 @@
 from django.urls import reverse
 
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class GroupQuestion(models.Model):
     group_name = models.CharField(max_length=250)
     description = models.CharField(max_length=100, blank=True, default='')
-    number_of_questions = models.IntegerField(default=1)
 
     def __str__(self):
         return self.group_name
@@ -31,3 +31,9 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{self.text} ({self.group})"
+
+
+class Result(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    correct = models.ForeignKey(Answer, on_delete=models.CASCADE)

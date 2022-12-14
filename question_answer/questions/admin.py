@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Question, GroupQuestion, Answer
+from .models import Question, GroupQuestion, Answer, Result
 
 
 class AnswerInline(admin.TabularInline):
@@ -33,3 +33,6 @@ class GroupQuestionAdmin(admin.ModelAdmin):
     list_display = ('group_name', 'description')
     list_filter = ['group_name']
     inlines = [QuestionInline, AnswerInline]
+
+
+admin.site.register(Result)

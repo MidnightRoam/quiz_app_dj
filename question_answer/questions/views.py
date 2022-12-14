@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Count
 
-from .models import Question, GroupQuestion, Answer
+from .models import Question, GroupQuestion, Answer, Result
 from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm, ResultForm
 
 
@@ -18,7 +18,7 @@ class HomePage(View):
         context = {
             'groups': GroupQuestion.objects
                                    .annotate(questions_count=Count('question__id'))
-                                   .filter(questions_count__gte=1),  # display group if group have 1+ question
+                                   .filter(questions_count__gte=1),  # display group if group have atleast 1 question
             'total_groups': GroupQuestion.objects
                                          .annotate(questions_count=Count('question__id'))
                                          .filter(questions_count__gte=1)
@@ -37,7 +37,7 @@ class QuestionsView(LoginRequiredMixin, ListView):
     paginate_by = 1
 
     def post(self, request, pk):
-        form = ResultForm
+        form = ResultForm()
         questions = Question.objects.filter(group__pk=pk)
         answers = Answer.objects.filter(question__pk=pk)
 
@@ -62,7 +62,6 @@ class QuestionsView(LoginRequiredMixin, ListView):
             # 'percent': percent,
             'results': form,
         }
-
         if qnumber == questions.count():
             return render(request, 'result.html', context)
         else:
@@ -78,7 +77,9 @@ class QuestionsView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs['pk']
-        p = Paginator(Question.objects.select_related().filter(group__pk=pk), self.paginate_by)  # pagination of question answers
+        p = Paginator(Question.objects
+                              .select_related()
+                              .filter(group__pk=pk), self.paginate_by)  # pagination of question answers
         context['questions'] = p.page(context['page_obj'].number)
         # context['questions'] = Question.objects.filter(group__pk=pk)
         context['answers'] = Answer.objects.filter(question__pk=pk)
@@ -112,7 +113,7 @@ class AddAnswerView(CreateView):
     """
     Makes it possible to create a answers for the questions for the administration
     through the site interface, not the admin panel.
-    After creating a answer, it redirects to the page of question.
+    After creating a answer, it redirects to the for creating answers.
     """
     template_name = 'add_answer.html'
     model = Answer
@@ -120,5 +121,11 @@ class AddAnswerView(CreateView):
     success_url = '/add_answer/'
 
 
-class ResultView(TemplateView):
+class ResultView(ListView):
     template_name = 'result.html'
+    model = Result
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_questions'] = Result.objects.filter().count()
+        return context

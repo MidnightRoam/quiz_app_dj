@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="group__list">
         {% if request.user.is_staff %}
             <a class="staff__groups" href="{% url 'add-group' %}" class="link staff__link">Add a new group</a>
         {% endif %}
-         <p class="total__groups">Available tests: {{ total_groups }}</p>
+         <div class="total__groups">
+             <p class="total__title">Available tests: {{ total_groups }}</p>
+             {% for group in groups|slice:":7" %}
+                 <a href="{{ group.get_absolute_url }}" class="total__list link">
+                    {{ group.group_name }}
+                 </a>
+             {% endfor %}
+             <p class="total__ending">Latest tests</p>
+         </div>
         {% for group in groups %}
         <div class="group">
             <div>
@@ -16,4 +25,8 @@
         </div>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
 {% endblock %}

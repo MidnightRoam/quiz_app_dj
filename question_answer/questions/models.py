@@ -35,5 +35,8 @@ class Answer(models.Model):
 
 class Result(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    group = models.ForeignKey(GroupQuestion, on_delete=models.CASCADE, default='')
     correct = models.ForeignKey(Answer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.pk)

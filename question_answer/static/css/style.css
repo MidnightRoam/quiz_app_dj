@@ -113,6 +113,48 @@
     align-content: flex-start
 }
 
+/* Index page search bar styles */
+.search {
+    position: absolute;
+    left: 40%;
+    top: 1.8%;
+}
+
+.search__input {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    transition: 0.5s;
+    background-image: url('https://icons.iconarchive.com/icons/icons8/windows-8/256/Very-Basic-Search-icon.png');
+    object-fit: cover;
+    background-position: center;
+    background-size: 25px;
+    opacity: 0.6;
+    background-repeat: no-repeat;
+}
+
+.search__input:focus {
+    border-radius: 1.5em;
+    width: 400px;
+    outline: none;
+    opacity: 1;
+    padding: 10px 70px 10px 30px;
+    background-position-x: 90%;
+}
+
+.search__input:hover {
+    opacity: 1;
+}
+
+.search__input::placeholder {
+    opacity: 0;
+}
+
+.search__input:focus::placeholder {
+    opacity: 1;
+}
+
 .total__groups {
     font-size: 2em;
     color: #fff;
@@ -128,7 +170,6 @@
     transition: 0.5s;
     border-bottom: 3px solid #44f5b1;
     overflow-y: hidden;
-    position: absolute;
 }
 
 .total__groups:hover {
@@ -164,6 +205,7 @@
     font-size: 1em;
     border-bottom: 2px solid #fff;
     width: 90%;
+    height: 12%;
     color: #8D9EFF;
     border-color: orange;
 }
@@ -182,8 +224,12 @@
     top: 86%;
     left: 5%;
     width: 90%;
-    color: #8D9EFF;
+    height: 15%;
+    color: #fff;
+    self-align: center;
+    background-color: #8D9EFF;
     border-top: 2px solid #8D9EFF;
+    border-radius: 0.2em;
 }
 
 .group {

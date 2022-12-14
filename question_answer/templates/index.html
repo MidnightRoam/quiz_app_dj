@@ -3,9 +3,13 @@
 
 {% block content %}
     <div class="group__list">
+        <div class="search">
+            <input type="search" id="search-field" class="search__input" placeholder="Enter a group name">
+        </div>
         {% if request.user.is_staff %}
             <a class="staff__groups" href="{% url 'add-group' %}" class="link staff__link">Add a new group</a>
         {% endif %}
+
          <div class="total__groups">
              <p class="total__title">Available tests: {{ total_groups }}</p>
              {% for group in groups|slice:":7" %}
@@ -15,6 +19,7 @@
              {% endfor %}
              <p class="total__ending">Latest tests</p>
          </div>
+
         {% for group in groups %}
         <div class="group">
             <div>
@@ -28,5 +33,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/searchBar.js' %}" type="text/javascript"></script>
 {% endblock %}

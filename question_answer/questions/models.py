@@ -12,7 +12,7 @@ class GroupQuestion(models.Model):
         return self.group_name
 
     def get_absolute_url(self):
-        return reverse('questions', kwargs={'pk': self.pk, })
+        return reverse('questions', kwargs={'pk': self.pk})
 
 
 class Question(models.Model):

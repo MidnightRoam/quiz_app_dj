@@ -5,9 +5,10 @@ from django.views.generic import DetailView, ListView, TemplateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.urls import reverse_lazy
 
 from .models import Question, GroupQuestion, Answer, Result
-from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm, ResultForm
+from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm, ResultForm, QuizForm
 
 
 class HomePage(View):
@@ -22,7 +23,10 @@ class HomePage(View):
             'total_groups': GroupQuestion.objects
                                          .annotate(questions_count=Count('question__id'))
                                          .filter(questions_count__gte=1)
-                                         .count()
+                                         .count(),
+            'latest_added_groups': GroupQuestion.objects
+                                   .annotate(questions_count=Count('question__id'))
+                                   .filter(questions_count__gte=1).order_by("-id")[:7]
         }
 
         return render(request, 'index.html', context)
@@ -37,7 +41,21 @@ class QuestionsView(LoginRequiredMixin, ListView):
     paginate_by = 1
 
     def post(self, request, pk):
-        form = ResultForm()
+        question_form = QuizForm(request.POST)
+        answer_form = AddAnswerForm(request.POST)
+        result_form = ResultForm()
+
+        if question_form.is_valid() and answer_form.is_valid():
+            # Save the question to the database
+            question = question_form.save()
+            # Save the answer to the database
+            answer = answer_form.save()
+
+            result = result_form.save(commit=False)
+            result.question = question
+            result.answer = answer
+            result.save()
+
         questions = Question.objects.filter(group__pk=pk)
         answers = Answer.objects.filter(question__pk=pk)
 
@@ -46,6 +64,7 @@ class QuestionsView(LoginRequiredMixin, ListView):
         correct = 0
         total = 0
         qnumber = 1
+
         for question in answers:
             total += 1
             if request.POST.get(question.correct) is True:
@@ -60,29 +79,30 @@ class QuestionsView(LoginRequiredMixin, ListView):
             'correct': correct,
             'total': total,
             # 'percent': percent,
-            'results': form,
         }
+        if 'page' in request.GET:
+            # get the current value of the page parameter from the request
+            page = request.GET.get('page')
+        else:
+            # initialize the page parameter to 0 if it is not present in the request
+            page = 1
+
         if qnumber == questions.count():
             return render(request, 'result.html', context)
         else:
             qnumber += 1
+            page = qnumber
+            # page = str(page)
             return redirect(f'/questions/{pk}/?page={qnumber}')
-
-    # def get_queryset(self, *args, **kwargs):
-    #     pk = self.kwargs['pk']
-    #     questions = Question.objects.filter(group__pk=pk)
-    #     answers = Answer.objects.filter(question__pk=pk)
-    #     return Question.objects.filter(group__pk=pk)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs['pk']
         p = Paginator(Question.objects
                               .select_related()
-                              .filter(group__pk=pk), self.paginate_by)  # pagination of question answers
+                              .filter(group__pk=self.kwargs['pk']), self.paginate_by)  # pagination of question answers
         context['questions'] = p.page(context['page_obj'].number)
         # context['questions'] = Question.objects.filter(group__pk=pk)
-        context['answers'] = Answer.objects.filter(question__pk=pk)
+        context['answers'] = Answer.objects.filter(question__pk=self.kwargs['pk'])
         return context
 
 
@@ -92,9 +112,8 @@ class AddQuestionView(CreateView):
     through the site interface, not the admin panel.
     """
     template_name = 'add_question.html'
-    model = Question
-    fields = '__all__'
-    success_url = '/add_question/'
+    form_class = AddQuestionForm
+    success_url = reverse_lazy('add_question')
 
 
 class AddQuestionGroupView(CreateView):
@@ -104,9 +123,8 @@ class AddQuestionGroupView(CreateView):
     After creating a room, it redirects to the page for creating questions.
     """
     template_name = 'add_question_group.html'
-    model = GroupQuestion
-    fields = '__all__'
-    success_url = '/add_question/'
+    form_class = AddQuestionGroupForm
+    success_url = reverse_lazy('add-question')
 
 
 class AddAnswerView(CreateView):
@@ -116,9 +134,8 @@ class AddAnswerView(CreateView):
     After creating a answer, it redirects to the for creating answers.
     """
     template_name = 'add_answer.html'
-    model = Answer
-    fields = '__all__'
-    success_url = '/add_answer/'
+    form_class = AddAnswerForm
+    success_url = reverse_lazy('add_answer')
 
 
 class ResultView(ListView):

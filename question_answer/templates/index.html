@@ -7,12 +7,12 @@
             <input type="search" id="search-field" class="search__input" placeholder="Enter a group name">
         </div>
         {% if request.user.is_staff %}
-            <a class="staff__groups" href="{% url 'add-group' %}" class="link staff__link">Add a new group</a>
+            <a class="staff__groups" href="{% url 'add-group' %}">Add a new group</a>
         {% endif %}
 
          <div class="total__groups">
              <p class="total__title">Available tests: {{ total_groups }}</p>
-             {% for group in groups|slice:":7" %}
+             {% for group in latest_added_groups %}
                  <a href="{{ group.get_absolute_url }}" class="total__list link">
                     {{ group.group_name }}
                  </a>

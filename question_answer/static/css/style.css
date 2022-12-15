@@ -99,9 +99,31 @@
     color: #44f5b1;
 }
 
+/* Forms styles */
+.add-question__form p {
+    width: 200px;
+}
+
+.add-question__form p label {
+    font-size: 1.2em;
+    font-weight: 400;
+}
+
+.add-question__form p input {
+    width: 280px;
+    border: none;
+    border: 2px solid #8D72E1;
+    border-radius: 0.5em;
+}
+
+.add-question__form p input:focus{
+    outline: none;
+    border-left: 2px solid #8D72E1;
+}
+
 .group__list {
     position: relative;
-    background: #D2DAFF;
+    background-image: linear-gradient(#8D72E1, #1FC5A8);
     background-repeat:no-repeat;
     background-size: cover;
     display: flex;
@@ -123,7 +145,7 @@
 .search__input {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 5em;
     border: none;
     transition: 0.5s;
     background-image: url('https://icons.iconarchive.com/icons/icons8/windows-8/256/Very-Basic-Search-icon.png');
@@ -134,7 +156,7 @@
     background-repeat: no-repeat;
 }
 
-.search__input:focus {
+.search__input:focus, .search__input:hover {
     border-radius: 1.5em;
     width: 400px;
     outline: none;
@@ -151,7 +173,7 @@
     opacity: 0;
 }
 
-.search__input:focus::placeholder {
+.search__input:focus::placeholder, .search__input:hover::placeholder {
     opacity: 1;
 }
 
@@ -395,7 +417,7 @@
 }
 
 .background {
-    background-image: url('/static/background.svg');
+    background-image: url('/static/images/background.svg');
     background-repeat:no-repeat;
     background-size: cover;
     height: 969px;

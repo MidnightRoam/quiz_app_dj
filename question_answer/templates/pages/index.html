@@ -13,7 +13,7 @@
          <div class="total__groups">
              <p class="total__title">Available tests: {{ total_groups }}</p>
              {% for group in latest_added_groups %}
-                 <a href="{{ group.get_absolute_url }}" class="total__list link">
+                 <a href="{% url 'group' pk=group.pk %}" class="total__list link">
                     {{ group.group_name }}
                  </a>
              {% endfor %}
@@ -23,7 +23,7 @@
         {% for group in groups %}
         <div class="group">
             <div>
-                <p class="group__title"><a href="{{ group.get_absolute_url }}" class="link">{{ group.group_name }}</a></p>
+                <p class="group__title"><a href="{% url 'group' pk=group.pk %}" class="link">{{ group.group_name }}</a></p>
                 <p class="group__description">{{ group.description }}</p>
             </div>
             <a href="{{ group.get_absolute_url }}" class="group__btn">Attempt Quiz</a>

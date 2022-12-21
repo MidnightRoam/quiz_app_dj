@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Let's quiz it!{% endblock %}
+
+{% block content %}
+        <div class="group-detail__page">
+            <div class="group-detail__card shadow">
+                <div class="card__main">
+                    <h1 class="card__title">{{ quiz.group_name }}</h1>
+                    <p class="card__description">{{ quiz.description }}</p>
+                    <p class="card__total">Total questions: {{ questions|length }}</p>
+                </div>
+                <div class="card__secondary">
+                    {% with questions|first as question %}
+                        <a href="{% url 'questions' pk=question.pk %}" class="link btn btn__secondary">Start</a>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block footer %} {% endblock %}

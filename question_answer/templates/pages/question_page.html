@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Let's quiz it!{% endblock %}
+
+{% block content %}
+    <div class="question__list">
+            {% if request.user.is_staff %}
+                <a href="{% url 'add-question' %}" class="staff__groups staff__link">Add a new question</a>
+                <a href="{% url 'add-answer' %}" class="new-answer__link">Add a new answer</a>
+            {% endif %}
+
+        <h1 class="question__title">{{ question.text }}</h1>
+        <form method="post" action="{% url 'questions' pk=question.pk %}" class="question__form">
+            {% csrf_token %}
+            {% for answer in answers %}
+                <div class="form__check">
+                    <input type="checkbox" class="question__option checkbox" name="answer" id="{{ answer.pk }}" value="{{ answer.pk }}">
+                    <label for="{{ answer.pk }}" class="form__label">
+                        {{ answer.text }}
+                    </label>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit" class="btn hide" id="btn">
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/disableButton.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block footer %} {% endblock %}

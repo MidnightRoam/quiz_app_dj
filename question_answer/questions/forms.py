@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from .models import Question, GroupQuestion, Answer, Result
 
 
-class QuizForm(ModelForm):
+class QuestionForm(ModelForm):
     class Meta:
         model = Question
         fields = "__all__"

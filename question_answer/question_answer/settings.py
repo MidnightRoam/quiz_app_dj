@@ -43,7 +43,6 @@ INSTALLED_APPS = [
 
     'questions.apps.TestsConfig',
     'users.apps.UsersConfig',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'question_answer.wsgi.application'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

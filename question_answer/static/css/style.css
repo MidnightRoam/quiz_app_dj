@@ -54,7 +54,7 @@
     border-radius: 0.2em;
     position: absolute;
     left: 80%;
-    top: 11%;
+    top: 13%;
     text-decoration: none;
     transition: 0.5s;
 }
@@ -133,6 +133,49 @@
     padding: 2.5em;
     flex-wrap: wrap;
     align-content: flex-start
+}
+
+/* Detail quiz group page styles */
+.group-detail__page {
+    width: 100%;
+    height: 899px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.group-detail__card {
+    width: 30%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #8D72E1;
+    padding: 30px;
+    border-radius: 0.5em;
+}
+
+.card__title {
+    font-size: 2em;
+    color: #fff;
+}
+
+.card__description {
+    font-size: 1.5em;
+    color: #fff;
+    border-bottom: 2px solid orange;
+}
+
+.card__total {
+    font-size: 1.5em;
+    color: #fff;
+    background-color: orange;
+    text-align: center;
+    margin-top: 5%;
+    border-radius: 0.3em;
+    padding: 5px 10px;
 }
 
 /* Index page search bar styles */
@@ -337,9 +380,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
+    height: 500px;
     margin: 0 auto;
-    height: auto;
 }
 
 .question {
@@ -352,6 +396,7 @@
 }
 
 .question__title {
+    font-weight: 300;
     font-size: 2.5em;
     padding: 15px;
     border-bottom: 2px solid #8D72E1;
@@ -375,7 +420,15 @@
 .form__check {
     font-size: 1.3em;
     margin: 5px 0px;
+    width: 300px;
+    padding: 5px;
 }
+
+.form__check:hover {
+    background-color: gainsboro;
+    border-radius: 0.2em;
+}
+
 
 /* Question pagination styles */
 .pagination-section {
@@ -494,9 +547,6 @@
     font-weight: 300;
 }
 
-input[type="radio"] {
-
-}
 
 .question__form {
     display: flex;
@@ -607,4 +657,14 @@ input[type="radio"] {
     cursor: pointer;
     background-color: #44f5b1;
     color: #8D72E1;
+}
+
+.btn__secondary {
+    background-color: orange;
+}
+
+.shadow {
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }

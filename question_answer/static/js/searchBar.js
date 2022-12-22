@@ -21,3 +21,12 @@ function search() {
 }
 
 search();
+
+const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/387");
+const buttons = document.querySelectorAll(".link");
+
+buttons.forEach(button => {
+      button.addEventListener("click", () => {
+      audio.play();
+  });
+});

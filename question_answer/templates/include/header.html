@@ -1,3 +1,4 @@
+{% load static %}
 <navbar class="navbar">
     {% if user.is_authenticated %}
         <li class="nav__li"><a href="{% url 'index' %}" class="link">Home</a></li>
@@ -10,3 +11,7 @@
         <li class="nav__li"><a href="{% url 'users:signup' %}" class="link">Sign Up</a></li>
     {% endif %}
 </navbar>
+
+{% block script %}
+    <script src="{% static 'js/searchBar.js' %}" type="text/javascript"></script>
+{% endblock %}

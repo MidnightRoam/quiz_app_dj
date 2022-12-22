@@ -1,3 +1,5 @@
+from pyexpat.errors import messages
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
@@ -11,7 +13,7 @@ from .models import Question, GroupQuestion, Answer, Result
 from .forms import AddQuestionForm, AddQuestionGroupForm, AddAnswerForm, ResultForm, QuestionForm
 
 
-class HomePage(View):
+class HomePageView(View):
     """Displayed groups of questions on the home page"""
     template_name = 'pages/index.html'
     paginate_by = 1
@@ -45,7 +47,7 @@ class GroupDetailView(DetailView):
         return context
 
 
-class QuestionsView(LoginRequiredMixin, DetailView):
+class QuestionDetailView(LoginRequiredMixin, DetailView):
     """List of group questions"""
     login_url = 'users:login'
     model = Question
@@ -63,28 +65,25 @@ class QuestionsView(LoginRequiredMixin, DetailView):
         selected_answer = request.POST.get('answer')
 
         # get the correct answer for the question
-        correct_answer = Answer.objects.get(question=self.object, correct=True)
+        correct_answers = Answer.objects.filter(question=self.object, correct=True)
 
         # check if the selected answer is correct
-        if selected_answer == correct_answer.pk:
-            # the answer is correct, so update the user's score
-            result = Result.objects.get(user=request.user, group=self.object.group)
-            result.correct += 1
-            result.save()
+        for correct_answer in correct_answers:  # Validation that there can be multiple answers
+            if selected_answer == correct_answer.pk:
+                # the answer is correct, so update the user's score
+                result = Result.objects.get(user=request.user, group=self.object.group)
+                result.correct += 1
+                result.save()
         # redirect to the next question in the quiz
         next_question = Question.objects.filter(group=self.object.group, pk__gt=self.object.pk).first()
         if next_question:
             return redirect(reverse_lazy('questions', kwargs={'pk': next_question.pk}))
         else:
             # there are no more questions, so redirect to the quiz results page
-            try:
-                result = Result.objects.get(user=request.user, group=self.object)
-            except Result.DoesNotExist:
-                first_question = Question.objects.filter(group=self.object).first()
-                return redirect(reverse_lazy('questions', kwargs={'pk': first_question.pk}))
+            return redirect(reverse_lazy('result', kwargs={'pk': self.object.group.pk}))
 
 
-class AddQuestionView(CreateView):
+class QuestionCreateView(CreateView):
     """
     Makes it possible to create questions in test rooms for the administration
     through the site interface, not the admin panel.
@@ -94,7 +93,7 @@ class AddQuestionView(CreateView):
     success_url = reverse_lazy('add-question')
 
 
-class AddQuestionGroupView(CreateView):
+class QuestionGroupCreateView(CreateView):
     """
     Makes it possible to create test rooms for the administration
     through the site interface, not the admin panel.
@@ -105,7 +104,7 @@ class AddQuestionGroupView(CreateView):
     success_url = reverse_lazy('add-question')
 
 
-class AddAnswerView(CreateView):
+class AnswerCreateView(CreateView):
     """
     Makes it possible to create a answers for the questions for the administration
     through the site interface, not the admin panel.
@@ -124,12 +123,16 @@ class ResultView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # get the user's score for the quiz
-        result = Result.objects.get(user=self.request.user, group=self.object)
-        context['score'] = result.correct
-        # get the list of questions the user answered correctly
-        correct_answers = Answer.objects.filter(question__group=self.object, correct=True)
-        context['correct_answers'] = correct_answers.filter(result__correct=correct_answers)
-        # get the list of questions the user answered incorrectly
-        incorrect_answers = Answer.objects.filter(question__group=self.object, correct=False)
-        context['incorrect_answers'] = incorrect_answers.exclude(result__correct=incorrect_answers)
+        result = Result.objects.filter(user=self.request.user, group=self.object)
+        if result.exists():
+            context['score'] = result.correct
+            # get the list of questions the user answered correctly
+            correct_answers = Answer.objects.filter(question__group=self.object, correct=True)
+            context['correct_answers'] = correct_answers.filter(result__correct=correct_answers)
+            # get the list of questions the user answered incorrectly
+            incorrect_answers = Answer.objects.filter(question__group=self.object, correct=False)
+            context['incorrect_answers'] = incorrect_answers.exclude(result__correct=incorrect_answers)
+        else:
+            # Display a message to the user
+            redirect('index')
         return context

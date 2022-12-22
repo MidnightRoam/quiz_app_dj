@@ -234,7 +234,7 @@
     border-radius: 0.2em;
     transition: 0.5s;
     border-bottom: 3px solid #44f5b1;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .total__groups:hover {

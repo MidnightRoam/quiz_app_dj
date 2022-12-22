@@ -71,7 +71,10 @@ class QuestionDetailView(LoginRequiredMixin, DetailView):
         for correct_answer in correct_answers:  # Validation that there can be multiple answers
             if selected_answer == correct_answer.pk:
                 # the answer is correct, so update the user's score
-                result = Result.objects.get(user=request.user, group=self.object.group)
+                try:
+                    result = Result.objects.get(user=self.request.user, group=self.object)
+                except Result.DoesNotExist:
+                    result = Result.objects.create(user=self.request.user, group=self.object)
                 result.correct += 1
                 result.save()
         # redirect to the next question in the quiz
@@ -128,7 +131,7 @@ class ResultView(DetailView):
             context['score'] = result.correct
             # get the list of questions the user answered correctly
             correct_answers = Answer.objects.filter(question__group=self.object, correct=True)
-            context['correct_answers'] = correct_answers.filter(result__correct=correct_answers)
+            context['correct_answers'] = correct_answers.filter(result__correct=correct_answers).count()
             # get the list of questions the user answered incorrectly
             incorrect_answers = Answer.objects.filter(question__group=self.object, correct=False)
             context['incorrect_answers'] = incorrect_answers.exclude(result__correct=incorrect_answers)

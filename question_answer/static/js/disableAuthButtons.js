@@ -19,5 +19,3 @@ function checkInputs() {
     registerBtn.classList.add('btn__disabled');
   }
 }
-
-console.log(checkInputs())

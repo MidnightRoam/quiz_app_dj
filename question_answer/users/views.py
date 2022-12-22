@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views import View
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 
 class LoginView(View):
@@ -32,10 +33,18 @@ class SignupView(View):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        if password1 == password2 and username:
-            user = User.objects.create_user(username=username, password=password1)
-            login(request, user)
-            return redirect('/')
+        existing_user = User.objects.filter(username=username).exists()
+        if existing_user:
+            context = {'error': 'A user with this username already exists.'}
+            return render(request, 'users/registration.html', context=context)
+
+        if password1 != password2 or not username:
+            context = {'error': 'Please enter a valid username and make sure that the passwords match.'}
+            return render(request, 'users/registration.html', context=context)
+
+        user = User.objects.create_user(username=username, password=password1)
+        login(request, user)
+        return redirect('/')
 
 
 class LogoutView(View):

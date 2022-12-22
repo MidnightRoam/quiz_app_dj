@@ -13,4 +13,3 @@ checkBoxes.forEach((checkBox) => {
         }
     })
 })
-
